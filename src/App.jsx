@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Layout from "./components/Layout/Layout"
+import { Route, Routes } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Shop from "./pages/Shop/Shop";
 
+import Shoping from "./pages/Shoping/Shoping";
+
+// import { useEffect } from "react";
+
+import { RestrictedRoute } from "./components/RestrictedRoute";
+import { PrivateRoute } from "./components/PrivateRoute";
+
+
+import RegisterForm from "./pages/RegisterForm/RegisterForm"
+import LoginForm from "./pages/LoginForm/LoginForm";
+// import { useDispatch, useSelector } from "react-redux";
+
+
+// import { selectedToken } from "./redux/auth/selectors";
+// import { refresh } from "./redux/auth/operations";
+import History from "./pages/History/History";
+import Home from "./pages/Home/Home";
+
+
+const App = () => {
+//   const dispatch = useDispatch()
+  // const token = useSelector(selectedToken)
+// console.log(token)
+//   useEffect(() => {
+//     if (token) {
+//       dispatch(refresh());
+//     }
+//   }, [dispatch, token])
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<RestrictedRoute component={Home} redirectTo="/shop"/>} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/:shopId" element={<Shop />} />
+            <Route path="/shoping" element={<Shoping />} />
+            <Route path="/orders" element={<PrivateRoute component={History} redirectTo={'/shop'} />} />
+            <Route path="/login" element={<RestrictedRoute component={LoginForm} redirectTo={'/shop'} />} />
+            <Route path="/register" element={<RestrictedRoute component={RegisterForm} redirectTo={'/shop'} />} />
+        </Route>
+      </Routes>
     </>
-  )
-}
+  );
+};
+
+
 
 export default App
